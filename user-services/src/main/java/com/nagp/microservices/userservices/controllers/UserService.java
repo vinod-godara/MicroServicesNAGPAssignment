@@ -37,7 +37,7 @@ public class UserService {
 
 	// Actual location on disk for database files, process should have read-write
 	// permissions to this folder
-	private String dbFilesLocation = "D:\\Workshop";
+	private String dbFilesLocation = "C:\\";
 
 	// Java package name where POJO's are present
 	private final String baseScanPackage = "com.nagp.microservices.userservices.model";

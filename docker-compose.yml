@@ -10,6 +10,19 @@ services:
             - "8761:8761"   
        hostname: eureka-server
         
+ spring-cloud-config-server:
+       container_name: spring-cloud-config-server
+       image:
+            vinodgod/spring-cloud-config-server:latest
+       expose:
+            - 8765
+       ports:
+            - "8765:8765" 
+       links:
+            - eureka-server:eureka-server
+       depends_on:
+            - eureka-server
+ 
  zuul-api-gateway:
        container_name: zuul-api-gateway
        image:
@@ -20,8 +33,10 @@ services:
             - "8765:8765" 
        links:
             - eureka-server:eureka-server
+            - spring-cloud-config-server:spring-cloud-config-server
        depends_on:
             - eureka-server
+            - spring-cloud-config-server
  user-services:
        container_name: user-services
        image:
@@ -32,8 +47,10 @@ services:
             - "8000:8000" 
        links:
             - eureka-server:eureka-server
+            - spring-cloud-config-server:spring-cloud-config-server
        depends_on:
             - eureka-server
+            - spring-cloud-config-server
  account-services:
        container_name: account-services
        image:
@@ -44,9 +61,11 @@ services:
             - "8000:8000" 
        links:
             - eureka-server:eureka-server
+            - spring-cloud-config-server:spring-cloud-config-server
             - user-services:user-services
        depends_on:
             - eureka-server
+            - spring-cloud-config-server
             - user-services
  miscellaneous-services:
        container_name: miscellaneous-services
@@ -58,8 +77,10 @@ services:
             - "8000:8000" 
        links:
             - eureka-server:eureka-server
+            - spring-cloud-config-server:spring-cloud-config-server
        depends_on:
             - eureka-server
+            - spring-cloud-config-server
  operation-services:
        container_name: operation-services
        image:
@@ -70,8 +91,10 @@ services:
             - "8000:8000" 
        links:
             - eureka-server:eureka-server
+            - spring-cloud-config-server:spring-cloud-config-server
        depends_on:
             - eureka-server
+            - spring-cloud-config-server
 
 
 
