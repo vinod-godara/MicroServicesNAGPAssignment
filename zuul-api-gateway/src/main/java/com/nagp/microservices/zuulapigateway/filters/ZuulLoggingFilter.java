@@ -26,6 +26,21 @@ public class ZuulLoggingFilter extends ZuulFilter {
 	public Object run() throws ZuulException {
 		HttpServletRequest httpServletRequest = RequestContext.getCurrentContext().getRequest();
 		logger.info("Request received {}, Request URI: {}", httpServletRequest, httpServletRequest.getRequestURI());
+
+		// Handle exception.
+		final RequestContext context = RequestContext.getCurrentContext();
+		final Object throwable = context.get("error.exception");
+
+		if (throwable instanceof ZuulException) {
+			final ZuulException zuulException = (ZuulException) throwable;
+			logger.error("Exception caught by Zuul filter: " + zuulException.getMessage());
+
+			context.remove("error.exception");
+			context.setResponseBody("Exception caught by Zuul.");
+			context.getResponse().setContentType("application/json");
+			context.setResponseStatusCode(500);
+		}
+
 		return null;
 	}
 
