@@ -1,0 +1,80 @@
+version: "1"
+services:
+ eureka-server:
+       container_name: eureka-server
+       image:
+            vinodgod/eureka-server:latest
+       expose:
+            - 8761
+       ports:
+            - "8761:8761"   
+       hostname: eureka-server
+        
+ zuul-api-gateway:
+       container_name: zuul-api-gateway
+       image:
+            vinodgod/zuul-service:latest
+       expose:
+            - 8765
+       ports:
+            - "8765:8765" 
+       links:
+            - eureka-server:eureka-server
+       depends_on:
+            - eureka-server
+ user-services:
+       container_name: user-services
+       image:
+            vinodgod/user-services:latest
+       expose:
+            - 8000
+       ports:
+            - "8000:8000" 
+       links:
+            - eureka-server:eureka-server
+       depends_on:
+            - eureka-server
+ account-services:
+       container_name: account-services
+       image:
+            vinodgod/account-services:latest
+       expose:
+            - 8000
+       ports:
+            - "8000:8000" 
+       links:
+            - eureka-server:eureka-server
+            - user-services:user-services
+       depends_on:
+            - eureka-server
+            - user-services
+ miscellaneous-services:
+       container_name: miscellaneous-services
+       image:
+            vinodgod/miscellaneous-services:latest
+       expose:
+            - 8000
+       ports:
+            - "8000:8000" 
+       links:
+            - eureka-server:eureka-server
+       depends_on:
+            - eureka-server
+ operation-services:
+       container_name: operation-services
+       image:
+            vinodgod/operation-services:latest
+       expose:
+            - 8000
+       ports:
+            - "8000:8000" 
+       links:
+            - eureka-server:eureka-server
+       depends_on:
+            - eureka-server
+
+
+
+
+            
+
